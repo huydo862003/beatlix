@@ -1,0 +1,20 @@
+version: "1.0.0"
+vault:
+  root_dir: "vault"
+repo:
+  url: "https://github.com/Huy-DNA/beatlix"
+  root: "homepage/"
+site:
+  origin: "https://Huy-DNA.github.io"
+  title: "Beatlix"
+  description: "Jam and listen to music together"
+  base_path: "/beatlix"
+  nav:
+    - title: "About"
+      link: "/index"
+      icon: icon.music
+    - title: "Research"
+      link: "/01-research/index"
+      icon: icon.library
+    - title: "GitHub"
+      link: "https://github.com/Huy-DNA/beatlix"
