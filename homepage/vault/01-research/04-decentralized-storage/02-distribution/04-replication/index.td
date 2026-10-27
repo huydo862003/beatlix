@@ -5,7 +5,7 @@ _icon: icon.folder
 
 [[directory-index]]
 
-Replication is how content survives beyond the node that originally uploaded it. In IPFS, there is no automatic replication: if the uploader goes offline and no other node has pinned the content, it becomes unavailable. Peers must explicitly pin CIDs to keep them. Pinning services (Pinata, web3.storage) act as persistent nodes that pin content on behalf of users, providing availability without running a local daemon.
+Replication is how content survives beyond the node that originally uploaded it. In [IPFS](../../00-general-concepts/01-ipfs/index), there is no automatic replication: if the uploader goes offline and no other node has pinned the content, it becomes unavailable. Peers must explicitly pin CIDs to keep them. Pinning services (Pinata, web3.storage) act as persistent nodes that pin content on behalf of users, providing availability without running a local daemon.
 
 ## References
 

@@ -5,7 +5,7 @@ _icon: icon.folder
 
 [[directory-index]]
 
-Peer discovery is how a node finds other peers to connect to when joining the network. IPFS uses bootstrap nodes as a known entry point, mDNS for local network discovery, and the DHT for wider network discovery. Once connected to a few peers, a node can expand its routing table by querying for peers closer to any given key.
+Peer discovery is how a node finds other peers to connect to when joining the network. [IPFS](../../00-general-concepts/01-ipfs/index) uses bootstrap nodes as a known entry point, mDNS for local network discovery, and the DHT for wider network discovery. Once connected to a few peers, a node can expand its routing table by querying for peers closer to any given key.
 
 ## References
 

@@ -14,7 +14,7 @@ In centralized settings, **location addressing** is often used (how the web work
   - The data and its address are coupled to a location.
 
 In decentralized settings, **content addressing**: data is identified by a cryptographic hash of its contents, not where it is stored. Anyone who has the data can serve it, and the recipient can verify integrity by hashing what they received.
-  - A **CID** (Content Identifier) in IPFS is a content address. The same file always has the same CID, regardless of which peer serves it.
+  - A **CID** (Content Identifier) in [IPFS](../00-general-concepts/01-ipfs/index) is a content address. The same file always has the same CID, regardless of which peer serves it.
   - A **DHT** (Distributed Hash Table) is how peers find who has a given CID, spreading the lookup table across all peers so there is no central directory.
 
 > Knowing what a DHT is raises further questions:
