@@ -7,6 +7,10 @@ _icon: icon.folder
 
 Decentralized storage addresses the question of where data lives when there is no central server. Instead of a single database, data is distributed across peers, nodes, or content-addressed networks.
 
+::: warning
+I figured this was too complicated for a simple webapp. And not everyone wants to join a network of peers and store data for each other. So we can just store data on their machine or their cloud and encrypts it with their key or something. **So this section is dropped**.
+:::
+
 ## General Idea
 
 Traditional storage puts data in a database you control. Removing that central server raises three problems:
