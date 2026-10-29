@@ -13,7 +13,6 @@ Sending a message between two people seems simple, but a reliable messaging syst
 
 - **Delivery**: what happens if the recipient is offline when you send? Someone has to hold the message until they reconnect.
 - **Ordering**: messages must arrive in the right order, or at least be reassembleable in order.
-- **Identity**: how does the recipient know the message is really from you?
 - **Privacy**: who can read the message in transit or at rest? E2EE solves the content problem, but p2p adds complications:
   - You have less control over who holds the ciphertext.
   - Key distribution has no central directory.
@@ -27,9 +26,8 @@ In a centralized system (Discord, Slack), a server handles all of this. In a p2p
 
 > See [Decentralized Storage](../04-decentralized-storage/index) for the storage layer this depends on.
 
-- [**Identity**](01-identity/index) - keypairs, federation accounts, self-sovereign identity
-- [**Delivery**](02-delivery/index) - WebRTC data channels, relays, federation
-- [**History & Sync**](03-history-sync/index) - homeserver storage, p2p sync, user-owned cloud, encrypted backup
+- [**Delivery**](01-delivery/index) - WebRTC data channels, relays, federation
+- [**History & Sync**](02-history-sync/index) - homeserver storage, p2p sync, user-owned cloud, encrypted backup
 
 ## References
 
