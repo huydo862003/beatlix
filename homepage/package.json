@@ -10,6 +10,6 @@
     "preview": "typerighter preview"
   },
   "devDependencies": {
-    "typerighter": "^0.45.3"
+    "typerighter": "^0.45.4"
   }
 }
