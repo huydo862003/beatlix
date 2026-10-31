@@ -193,6 +193,10 @@ All operations (scalar multiplication, point addition, KDF) must run in **consta
 
 ## Offline Key Exchange: X3DH (Extended Triple Diffie-Hellman)
 
+## E2EE
+
+See [E2EE](../04-e2ee/index) for how key exchange fits into the full E2EE design.
+
 ## References
 
 **Online key exchange: ECDH (X25519)**

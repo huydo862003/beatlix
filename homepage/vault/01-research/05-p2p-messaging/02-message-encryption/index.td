@@ -9,6 +9,10 @@ How each message is encrypted after the initial key exchange, with forward secre
 
 Using a single shared key for all messages means: if that key is ever compromised, every past and future message is exposed.
 
+## E2EE
+
+See [E2EE](../04-e2ee/index) for how message encryption fits into the full E2EE design.
+
 ## References
 
 - [Signal >> Double Ratchet](https://signal.org/docs/specifications/doubleratchet/) - per-message key rotation, forward secrecy

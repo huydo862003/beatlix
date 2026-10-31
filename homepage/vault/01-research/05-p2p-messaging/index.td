@@ -16,6 +16,7 @@ P2P messaging addresses how messages are delivered between peers without routing
 - [**Key Exchange**](01-key-exchange/index) - establishing a shared secret between two peers
 - [**Message Encryption**](02-message-encryption/index) - per-message key rotation with forward secrecy
 - [**Backup / Device Migration**](03-backup-device-migration/index) - recovering keys and history on a new device
+- [**E2EE**](04-e2ee/index) - how the pieces fit together
 
 ## References
 

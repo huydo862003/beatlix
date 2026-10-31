@@ -9,6 +9,10 @@ How a user recovers their message history and encryption keys on a new device.
 
 Private keys live on the device and never leave it. Switching devices means the private key is gone, and past messages become unreadable.
 
+## E2EE
+
+See [E2EE](../04-e2ee/index) for how backup/migration fits into the full E2EE design.
+
 ## References
 
 - [Signal SVR (Secure Value Recovery)](https://signal.org/blog/signal-pins/) - PIN-based key recovery
