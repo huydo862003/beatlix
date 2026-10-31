@@ -80,10 +80,13 @@ $y = x^3 + ax + b$ is also cubic and Bezout still applies, but it doesn't work:
 - **Key derivation (KDF)**: a function that takes a raw shared secret and derives a proper encryption key.
   ::: details How KDF works
   The raw ECDH output is a point $(x, y)$ on the curve, not a uniform random bitstring. The coordinates satisfy the curve equation, so they are correlated, not all bitstrings are valid x-coordinates (only about half of field elements have a corresponding point), and the distribution is not uniform. An encryption key (e.g. AES-256) must be indistinguishable from a uniform random bitstring. A KDF (e.g. HKDF) extracts the entropy from the curve point and produces a uniform key of the right length. HKDF works in two steps:
+
   1. **Extract**: takes the raw input (the curve point's x-coordinate) and a salt, runs HMAC to produce a pseudorandom key.
   2. **Expand**: takes that key and an `info` string (context, e.g. "beatlix-chat-v1"), runs HMAC iteratively to produce the desired number of output bytes (e.g. 32 bytes for AES-256).
 
   Salt, info, and output length are public, fixed constants hard-coded into the protocol. The security comes from the shared secret, not the KDF parameters.
+
+  There is another reason to use a KDF: since scalar multiplication is commutative, two unrelated pairs of participants could arrive at the same shared secret (for the same reason that $3 \times 8 = 4 \times 6$). A proper KDF hashes the ECDH output together with both participants' public keys, guaranteeing the derived session key is unique to this specific pair.
   :::
 - **ECDH (Elliptic Curve Diffie-Hellman)**: key exchange protocol using elliptic curve scalar multiplication.
 - **X25519**: ECDH over Curve25519 (Montgomery form). The standard choice.
@@ -156,6 +159,37 @@ They exchange public keys over the authenticated channel. Then each multiplies t
 Since scalar multiplication is commutative ($sk_A \times sk_B \times G = sk_B \times sk_A \times G$), both arrive at the same shared secret. An eavesdropper on the authenticated channel sees only $pk_A$ and $pk_B$ and cannot recover the shared secret or either secret key.
 
 The raw shared secret is a point on the curve. Pass it through a **KDF** (e.g. HKDF) to derive the actual symmetric encryption key.
+
+### Shared Secret Collision
+
+Two unrelated pairs of participants can end up with the same shared secret, for the same reason $3 \times 8 = 4 \times 6$: different secret keys, same product. To prevent this, the KDF input should include both participants' public keys alongside the ECDH output, binding the derived key to this specific pair.
+
+### Authenticating Public Keys
+
+ECDH alone does not prove *who* you're talking to. Without authentication, an active attacker can substitute both public keys and sit in the middle, with neither party realizing they're talking to a middleman (MITM).
+
+This is why the scenario requires an **authenticated** channel for exchanging public keys. Different systems solve this differently:
+
+- **TLS (HTTPS)**: uses a chain of digital signatures from trusted root CAs. The server's ECDH public key is signed by the server's long-term key, which is in turn signed by a CA. The client trusts the CA's root certificate (pre-installed in the OS root store).
+- **Signal / P2P messaging**: uses long-term identity keys. Each user has a stable identity key pair. Ephemeral ECDH public keys are signed by the identity key. Users verify each other's identity keys out-of-band (e.g. comparing "safety numbers").
+- **SSH**: the server's public key is presented on first connection ("trust on first use") and the client remembers it for future connections.
+
+### Invalid Curve Attacks
+
+When Alice does ECDH, she computes $S = sk_A \times pk_B$. Her code just does scalar multiplication on whatever point it receives. If it doesn't verify the point is on the correct curve, the math still works, just on a different curve. The attacker exploits this:
+
+1. The attacker poses as Bob and sends Alice a forged point $P'$ on a different curve with a very small group order (e.g. order 7).
+2. Alice computes $S = sk_A \times P'$ and encrypts a message with a key derived from $S$. In a group of order 7, there are only 7 possible values for $S$. The attacker cannot compute $S$ via the normal ECDH path ($sk_B \times pk_A$) because $P'$ was not derived from $sk_B \times G$, so there is no valid $sk_B$ that produces the same shared secret. But with only 7 possibilities, the attacker brute-forces all of them against Alice's encrypted message. The one that decrypts correctly reveals $sk_A \mod 7$.
+3. The attacker repeats with points on other small-order curves, learning $sk_A \mod 11$, $sk_A \mod 13$, etc.
+4. Using the Chinese Remainder Theorem, the attacker combines these remainders to recover Alice's full secret key $sk_A$.
+
+**Mitigation**: verify that the received point satisfies the chosen curve equation before using it.
+
+**Modern approach**: only send a single coordinate plus a sign bit (point compression). X25519 goes further: it only uses the x-coordinate and is designed so that invalid points are handled safely by the curve arithmetic itself.
+
+### Timing Side-channels
+
+All operations (scalar multiplication, point addition, KDF) must run in **constant time**: the same number of steps regardless of the secret key's value. If execution time varies depending on the key bits, an attacker can measure timing differences (via network latency or other side-channels) and recover the secret key. This is one reason X25519 is preferred: Curve25519 was designed from the start to be easy to implement in constant time.
 
 ## Offline Key Exchange: X3DH (Extended Triple Diffie-Hellman)
 
