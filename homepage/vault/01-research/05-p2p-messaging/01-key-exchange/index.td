@@ -77,7 +77,14 @@ $y = x^3 + ax + b$ is also cubic and Bezout still applies, but it doesn't work:
 - **Scalar multiplication**: $kP = \underbrace{P + P + \cdots + P}_{k}$ (point addition applied $k$ times). Computed efficiently in $O(\log k)$ via double-and-add.
 - **Cyclic group**: a group where every element is produced by repeatedly applying the operation to a single element (the generator). If the generator is $G$ and the order is $n$, the group is $\{\mathcal{O}, G, 2G, 3G, ..., (n-1)G\}$ where $nG = \mathcal{O}$ (wraps back to identity).
 - **Generator $G$**: a specific point on the curve that generates a cyclic group of order $n$. Computing $kG$ (scalar multiplication) is fast, but recovering $k$ from $kG$ is computationally infeasible (the elliptic curve discrete log problem).
-- **Key derivation (KDF)**: a function that takes a raw shared secret and derives a proper encryption key. Never use a raw ECDH output directly.
+- **Key derivation (KDF)**: a function that takes a raw shared secret and derives a proper encryption key.
+  ::: details How KDF works
+  The raw ECDH output is a point $(x, y)$ on the curve, not a uniform random bitstring. The coordinates satisfy the curve equation, so they are correlated, not all bitstrings are valid x-coordinates (only about half of field elements have a corresponding point), and the distribution is not uniform. An encryption key (e.g. AES-256) must be indistinguishable from a uniform random bitstring. A KDF (e.g. HKDF) extracts the entropy from the curve point and produces a uniform key of the right length. HKDF works in two steps:
+  1. **Extract**: takes the raw input (the curve point's x-coordinate) and a salt, runs HMAC to produce a pseudorandom key.
+  2. **Expand**: takes that key and an `info` string (context, e.g. "beatlix-chat-v1"), runs HMAC iteratively to produce the desired number of output bytes (e.g. 32 bytes for AES-256).
+
+  Salt, info, and output length are public, fixed constants hard-coded into the protocol. The security comes from the shared secret, not the KDF parameters.
+  :::
 - **ECDH (Elliptic Curve Diffie-Hellman)**: key exchange protocol using elliptic curve scalar multiplication.
 - **X25519**: ECDH over Curve25519 (Montgomery form). The standard choice.
 - **X448**: ECDH over Curve448. Larger key, higher security margin, slower.
@@ -109,6 +116,46 @@ Modern cryptography used the **Elliptic Curve variant of the Diffie-Hellman prot
 :::
 
 ### Elliptic Curve Diffie-Hellman
+
+Both peers agree on:
+
+- An elliptic curve.
+- A generator point $G$ of order $n$.
+
+> In practice, nobody picks their own curve.
+> They use a named standard like **Curve25519**, published in [RFC 7748](https://datatracker.ietf.org/doc/html/rfc7748):
+> In Montgomery form: $By^2 = x^3 + Ax^2 + x$ over Galois fielf $p$, with $p = 2^{255} - 19$, $A = 486662$, $B = 1$, plus a fixed $G$ and $n$). Both peers just say "X25519" and all parameters are determined.
+> These parameters are public, preferably hard-coded. When they are not, you get [CVE-2020-0601](https://nvd.nist.gov/vuln/detail/CVE-2020-0601).
+
+::: details CVE-2020-0601 ("CurveBall")
+Windows CryptoAPI (Windows 10, Server 2016/2019) accepted custom curve parameters from certificates instead of enforcing hard-coded ones.
+
+The security guarantees came from given the parameters, it's hard to determine which **private key** produce a **public key**.
+
+If the parameters can be specified, you change what secret key produces a given public key, so an attacker can craft parameters where they know the secret key for an existing trusted public key.
+
+This allowed forging certificates that Windows accepted as signed by a legitimate CA. See [Kudelski Security >> CVE-2020-0601 explained with PoC](https://research.kudelskisecurity.com/2020/01/15/cve-2020-0601-the-chainoffools-attack-explained-with-poc/) and [Trail of Bits >> Exploiting the Windows CryptoAPI Vulnerability](https://blog.trailofbits.com/2020/01/16/exploiting-the-windows-cryptoapi-vulnerability/).
+:::
+
+Each participant generates a key pair:
+
+1. Pick a random **secret key** $sk$ (an integer between $0$ and $n-1$).
+2. Compute the **public key**: $pk = sk \times G$.
+   > This is scalar multiplication: multiplying a number (the secret key) by a point (the generator). It is fast to compute but infeasible to reverse.
+
+Note that both participants do this independently:
+
+- Alice has $pk_A = sk_A \times G$
+- Bob has $pk_B = sk_B \times G$
+
+They exchange public keys over the authenticated channel. Then each multiplies their secret key by the other's public key:
+
+- Alice computes $S_A = sk_A \times pk_B$
+- Bob computes $S_B = sk_B \times pk_A$
+
+Since scalar multiplication is commutative ($sk_A \times sk_B \times G = sk_B \times sk_A \times G$), both arrive at the same shared secret. An eavesdropper on the authenticated channel sees only $pk_A$ and $pk_B$ and cannot recover the shared secret or either secret key.
+
+The raw shared secret is a point on the curve. Pass it through a **KDF** (e.g. HKDF) to derive the actual symmetric encryption key.
 
 ## Offline Key Exchange: X3DH (Extended Triple Diffie-Hellman)
 
