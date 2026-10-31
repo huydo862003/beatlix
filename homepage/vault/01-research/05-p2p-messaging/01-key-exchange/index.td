@@ -89,9 +89,18 @@ $y = x^3 + ax + b$ is also cubic and Bezout still applies, but it doesn't work:
   There is another reason to use a KDF: since scalar multiplication is commutative, two unrelated pairs of participants could arrive at the same shared secret (for the same reason that $3 \times 8 = 4 \times 6$). A proper KDF hashes the ECDH output together with both participants' public keys, guaranteeing the derived session key is unique to this specific pair.
   :::
 - **ECDH (Elliptic Curve Diffie-Hellman)**: key exchange protocol using elliptic curve scalar multiplication.
-- **X25519**: ECDH over Curve25519 (Montgomery form). The standard choice.
+- **Curve25519**: an elliptic curve designed by Daniel J. Bernstein. It can be represented in Montgomery form ($By^2 = x^3 + Ax^2 + x$ with $A = 486662$, $B = 1$, $p = 2^{255} - 19$) or the birationally equivalent Edwards form. Both representations use the same underlying curve but serve different purposes:
+
+  - **X25519**: ECDH over Curve25519 (Montgomery form).
+    - Used for key exchange.
+  - **Ed25519**: digital signature scheme over Curve25519 (Edwards form).
+    - Used for signing/verifying (proving identity).
+
+  Keys can be converted between the two via libsodium.
+
 - **X448**: ECDH over Curve448. Larger key, higher security margin, slower.
 - **X3DH**: Extended Triple Diffie-Hellman. Signal's protocol for offline key exchange.
+- **Key bundle**: the set of public keys a recipient pre-uploads to a server so others can initiate encrypted conversations while the recipient is offline. It contains an identity key ($IK$), a signed pre-key ($SPK$) with its signature, and a batch of one-time pre-keys ($OPK_1, OPK_2, ...$). See [X3DH](#offline-key-exchange-x3dh-extended-triple-diffie-hellman).
 
 ## Online Key Exchange: ECDH Key Exchange
 
@@ -193,6 +202,136 @@ All operations (scalar multiplication, point addition, KDF) must run in **consta
 
 ## Offline Key Exchange: X3DH (Extended Triple Diffie-Hellman)
 
+> Link: https://soatok.blog/2020/11/14/going-bark-a-furrys-guide-to-end-to-end-encryption/
+
+The problem: the recipient is offline. You can't do real-time ECDH because there's no one on the other end to generate an ephemeral key.
+
+X3DH solves this by having the recipient **pre-upload a key bundle** to a server before going offline. A key bundle is the set of public keys packaged together that the server hands out to anyone who wants to start a conversation with this recipient.
+
+### Key Types
+
+X3DH uses four types of keys, each with a different lifetime and purpose:
+
+- **Identity Key (IK)**: a **long-term Ed25519 signing keypair** that *represents the user's identity*, converted to **X25519** for *DH operations*.
+
+  - It is used to:
+    1. Sign key bundles (proving they came from this user).
+    2. Bind the user's identity into the DH operations.
+  - It is generated once & never rotated.
+
+- **Signed Pre-Key (SPK)**: a **medium-term X25519 key-agreement keypair**, signed by **the identity key** and **rotated periodically** (e.g. weekly).
+
+  - Always available. There is exactly one at any time. Every sender uses it in the handshake.
+  - Because it is reused across all conversations between rotations, compromising it would break every session that relied solely on it.
+
+- **One-Time Pre-Key (OPK)**: **disposable X25519 key-agreement keypairs**, _consumed one per session and deleted after use_.
+
+  - Limited supply (e.g. 100). Each sender takes one from the server and it's gone.
+  - Adds per-session uniqueness on top of the SPK: even if the SPK is compromised, past sessions that used a unique OPK remain safe.
+  - When OPKs run out, the handshake still works, just without this extra layer of forward secrecy.
+
+- **Ephemeral Key (EK)**: a **temporary X25519 key-agreement keypair** that the sender generates _fresh for each conversation_. It provides forward secrecy on the sender's side: even if the sender's identity key is later compromised, past conversations remain safe because the ephemeral private key was discarded.
+
+### Flow
+
+Alice wants to send Bob an encrypted message, but Bob is offline. Bob has previously uploaded his key bundle to a server. The server acts as a mailbox: it stores Bob's key bundle for anyone who wants to reach him, and holds encrypted messages until Bob comes back online.
+
+The flow has three phases: registration, sending, and receiving.
+
+#### 1. Registration (Bob, before going offline)
+
+1. **Generate an identity keypair** ($IK_B$).
+   - This is an **Ed25519 signing keypair**:
+   - A private key that can sign data.
+   - A public key that others use to verify signatures.
+   - This represents Bob's long-term identity and is generated once.
+2. **Generate a signed pre-key** ($SPK_B$).
+   - This is an **X25519 key-agreement keypair** (an ECDH keypair: $sk$ is a random scalar, $pk = sk \times G$, the same as in the [online ECDH section](#elliptic-curve-diffie-hellman), just pre-uploaded instead of exchanged in real time).
+   - Its purpose is deriving shared secrets, not signing.
+3. **Generate a batch of one-time pre-keys** ($OPK_{B1}, OPK_{B2}, ...$), typically 100.
+   - These are also **X25519 key-agreement** keypairs, one consumed per conversation.
+   - Why separate from SPK? The SPK is medium-term (rotated weekly) and reused across multiple conversations until rotated. If the SPK is later compromised, every session that relied solely on it would be broken. OPKs add a unique, disposable element per session: even if the SPK is compromised, past conversations that used a unique OPK remain safe.
+4. **Sign the bundle**: hash all public keys together with BLAKE2b (a fast cryptographic hash), then sign the hash with the identity key's private key. This proves the bundle came from Bob and hasn't been tampered with.
+5. **Upload** the key bundle ($IK_B$, $SPK_B$ + signature, all OPK public keys) to the server. Bob keeps all private keys on his device.
+6. Go offline. The server holds the bundle and hands it out to anyone who wants to reach Bob.
+
+::: details Mapping to libsodium
+| Step | Operation | libsodium function |
+|------|-----------|-------------------|
+| 1 | Generate Ed25519 signing keypair | `crypto_sign_keypair()` |
+| 2, 3 | Generate X25519 key-agreement keypair | `crypto_box_keypair()` |
+| 4 | Hash public keys with BLAKE2b | `crypto_generichash()` |
+| 4 | Sign hash with Ed25519 private key | `crypto_sign_detached()` |
+| DH | Convert Ed25519 keys to X25519 for DH | `crypto_sign_ed25519_sk_to_curve25519()` / `crypto_sign_ed25519_pk_to_curve25519()` |
+:::
+
+Bob should periodically come online to rotate $SPK_B$ and replenish OPKs when they run low.
+
+#### 2. Sending (Alice, online)
+
+1. Fetch Bob's pre-key bundle from the server: ($IK_B$, $SPK_B$, signature, and one $OPK_B$ if available).
+2. Verify the bundle signature using $IK_B$ to confirm it came from Bob.
+3. Generate a fresh ephemeral keypair $EK_A$.
+4. Convert $IK_A$ from Ed25519 to X25519, then perform the DH operations:
+   - $DH_1 = DH(IK_A, SPK_B)$ - binds sender's identity
+   - $DH_2 = DH(EK_A, IK_B)$ - binds recipient's identity
+   - $DH_3 = DH(EK_A, SPK_B)$ - forward secrecy via ephemeral key
+   - $DH_4 = DH(EK_A, OPK_B)$ - per-session forward secrecy (omitted if no OPK available)
+5. Derive shared secret: $SK = KDF(DH_1 \| DH_2 \| DH_3 \| DH_4)$
+6. Encrypt the initial message with $SK$ and send it to the server along with:
+   - $IK_A$ (so Bob knows who sent it)
+   - $EK_A$ (so Bob can compute $DH_2$ and $DH_3$)
+   - which $OPK_B$ was used (so Bob can look up the corresponding private key)
+
+#### 3. Receiving (Bob, comes online later)
+
+1. Receive the initial message with $IK_A$, $EK_A$, and the OPK identifier.
+2. Look up the private keys for his $IK_B$, $SPK_B$, and the consumed $OPK_B$.
+3. Convert $IK_B$ from Ed25519 to X25519, then perform the same DH operations from his side:
+   - $DH_1 = DH(SPK_B, IK_A)$
+   - $DH_2 = DH(IK_B, EK_A)$
+   - $DH_3 = DH(SPK_B, EK_A)$
+   - $DH_4 = DH(OPK_B, EK_A)$
+4. Derive the same $SK = KDF(DH_1 \| DH_2 \| DH_3 \| DH_4)$ and decrypt.
+5. Delete the consumed OPK's private key.
+
+### Why 3 (or 4) DH operations?
+
+A single ECDH would only establish a shared secret without proving identity. Each DH serves a purpose:
+
+- $DH_1$ ($IK_A$, $SPK_B$): proves Alice's identity to Bob
+- $DH_2$ ($EK_A$, $IK_B$): proves Bob's identity to Alice
+- $DH_3$ ($EK_A$, $SPK_B$): provides forward secrecy (ephemeral + medium-term)
+- $DH_4$ ($EK_A$, $OPK_B$): per-session forward secrecy, ensures each session is unique even if $SPK_B$ is later compromised
+
+### Implementation Notes
+
+- Identity keys are Ed25519 (for signing), converted to X25519 (for DH) via libsodium's `crypto_sign_ed25519_sk_to_curve25519` / `crypto_sign_ed25519_pk_to_curve25519`. Some cryptographers distrust this birational equivalence conversion, though no vulnerability has been demonstrated.
+- The pre-key bundle is signed as a whole: a BLAKE2b hash of all concatenated public keys, with a detached Ed25519 signature over that hash.
+- OPKs are consumed atomically: the server deletes them after handing them out. When OPKs run out, $DH_4$ is simply omitted. The protocol still works with 3 DH operations, but without per-session forward secrecy.
+- SPKs should be rotated periodically (e.g. weekly). The previous SPK's private key may be kept briefly to handle delayed messages.
+
+**Library**: [rawr-x3dh](https://github.com/soatok/rawr-x3dh) - Soatok's TypeScript X3DH implementation built on libsodium.
+
+### Deniability
+
+X3DH provides **deniability**: after a conversation, neither party can prove to a third party that the other person participated. The DH shared secret could have been computed by anyone who knows the public keys, so there is no cryptographic evidence tying a specific person to a message.
+
+This is a deliberate contrast with digital signatures, which are proof that the signer authored a message. X3DH authenticates the exchange (both parties know who they're talking to) without creating non-repudiable evidence.
+
+This matters for sensitive communications: even if messages leak, there is no mathematical proof of who said what.
+
+> See [Soatok >> A Brief Introduction to Deniability](https://soatok.blog/2020/11/04/a-brief-introduction-to-deniability/) for a deeper treatment.
+
+### After X3DH
+
+X3DH is only used for the initial handshake. Using it for every message would be inefficient and unnecessary. After deriving $SK$, the protocol hands off to a **Double Ratchet**:
+
+1. $SK$ seeds a **symmetric-key ratchet**: each message derives a new key from the previous one, so compromising one message key does not expose past or future messages.
+2. A **DH ratchet** periodically introduces new ECDH exchanges to refresh the key material entirely.
+
+This is covered in [Message Encryption](../02-message-encryption/index).
+
 ## E2EE
 
 See [E2EE](../04-e2ee/index) for how key exchange fits into the full E2EE design.
@@ -211,3 +350,7 @@ See [E2EE](../04-e2ee/index) for how key exchange fits into the full E2EE design
 **Offline key exchange: X3DH**
 
 - [Signal >> X3DH](https://signal.org/docs/specifications/x3dh/) - async key exchange via pre-uploaded key bundles
+- [Soatok >> Going Bark: A Furry's Guide to End-to-End Encryption](https://soatok.blog/2020/11/14/going-bark-a-furrys-guide-to-end-to-end-encryption/) - X3DH walkthrough with libsodium implementation
+- [rawr-x3dh](https://github.com/soatok/rawr-x3dh) - Soatok's TypeScript X3DH implementation built on libsodium
+- [Soatok >> A Brief Introduction to Deniability](https://soatok.blog/2020/11/04/a-brief-introduction-to-deniability/) - why X3DH provides deniability
+- [Soatok >> Reviewing Signal's Cryptography, Part 3](https://soatok.blog/signal-crypto-review-2025-part-3/) - deeper review of Signal's X3DH implementation
