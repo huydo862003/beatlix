@@ -46,9 +46,7 @@ All methods above tier F are **AEAD** (Authenticated Encryption with Associated 
 **Nonce misuse**: accidentally reusing the same nonce with the same key. Different ciphers fail differently:
 
 - **AES-GCM**: catastrophic. The attacker can recover the authentication key, forge messages, and XOR plaintexts together.
-
   ::: details How AES-GCM nonce reuse breaks everything
-
   **How AES-GCM works**: AES is a block cipher (encrypts fixed 128-bit blocks). AES-GCM combines two parts:
 
   1. **Encryption (CTR mode)**: generates a keystream from (key, nonce, counter=0, 1, 2, ...) and XORs it with the plaintext. This turns AES into a stream cipher.
@@ -57,6 +55,7 @@ All methods above tier F are **AEAD** (Authenticated Encryption with Associated 
   Both the keystream and the mask are fully determined by (key, nonce). Same nonce = same keystream and same mask. This breaks both parts independently:
 
   **1. Content leaks**: two plaintexts $P_1$, $P_2$ encrypted with the same keystream:
+
   - $C_1 \oplus C_2 = P_1 \oplus P_2$ (keystream cancels, attacker gets XOR of plaintexts).
 
   **2. Auth key recoverable**: two tags computed with the same mask. For ciphertext blocks $A_i$ (message 1) and $B_i$ (message 2):
@@ -68,12 +67,17 @@ All methods above tier F are **AEAD** (Authenticated Encryption with Associated 
   The mask cancels. The left side is known (attacker has both tags). The coefficients $(A_i \oplus B_i)$ are known (attacker has both ciphertexts). The only unknown is $H$.
 
   So given a polynomial equation & one unknown, it is solvable over $GF(2^{128})$. Once $H$ is known, the attacker can forge valid tags for arbitrary messages.
-
   :::
 - **AES-GCM-SIV / AES-SIV**: "misuse resistant". Reusing a nonce only reveals whether the same plaintext was encrypted twice. No key recovery, no forgery.
 - **XChaCha20-Poly1305**: avoids the problem entirely. The 192-bit nonce makes accidental collision astronomically unlikely with random generation ($2^{80}$ messages before 50% collision chance).
 
 **Library**: [libsodium](https://doc.libsodium.org/) (or `sodium-plus` for JS) provides XChaCha20-Poly1305 out of the box.
+
+### Conclusion
+
+In practice, you plug the key (from KDF) and the plaintext into an AEAD cipher (e.g. XChaCha20-Poly1305 via libsodium). It handles encryption, authentication, and nonce generation. The output is (nonce, ciphertext, tag), sent to the recipient. The recipient uses the same key + nonce to decrypt and verify.
+
+The next concern is: you shouldn't use the same key forever. See [Key rotation / forward secrecy](#references) below.
 
 ## E2EE
 
