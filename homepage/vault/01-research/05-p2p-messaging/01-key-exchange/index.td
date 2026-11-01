@@ -280,7 +280,7 @@ Bob should periodically come online to rotate $SPK_B$ and replenish OPKs when th
 
 #### 2. Sending (Alice, online)
 
-1. Fetch Bob's pre-key bundle from the server: ($IK_B$, $SPK_B$, signature, and one $OPK_B$ if available).
+1. Fetch Bob's pre-key bundle from the server: ($IK_B$, $SPK_B$, signature, and one $OPK_B$ if available). The server picks an OPK and atomically removes it from the pool, so no two senders can receive the same OPK.
 2. Verify the bundle signature using $IK_B$ to confirm it came from Bob.
 3. Generate a fresh ephemeral keypair $EK_A$ (an X25519 key-agreement keypair, same as SPK/OPK: random scalar $sk$, public key $pk = sk \times G$).
 4. Convert $IK_A$ from Ed25519 to X25519, then perform the DH operations. Each $DH(a, b)$ computes $sk_a \times pk_b$: $a$'s **private** key scalar-multiplied by $b$'s **public** key. This is the same ECDH operation from the [online section](#elliptic-curve-diffie-hellman):
