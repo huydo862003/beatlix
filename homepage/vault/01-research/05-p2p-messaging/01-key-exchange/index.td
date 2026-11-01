@@ -5,6 +5,8 @@ _icon: icon.message
 
 How two users establish a shared secret for E2EE.
 
+> **Disclaimer**: we are not security researchers or cryptography professionals. This page reinterprets and summarizes articles by people who are (primarily [Soatok](https://soatok.blog/)). Errors and misunderstandings are possible. Do not use this as your sole reference for implementing cryptography. Always consult the original sources linked in [References](#references).
+
 ## Problem
 
 E2EE requires both parties to share a secret key before they can exchange messages.
@@ -196,6 +198,15 @@ When Alice does ECDH, she computes $S = sk_A \times pk_B$. Her code just does sc
 
 **Modern approach**: only send a single coordinate plus a sign bit (point compression). X25519 goes further: it only uses the x-coordinate and is designed so that invalid points are handled safely by the curve arithmetic itself.
 
+### After ECDH
+
+ECDH + KDF gives you one symmetric key. But using a single key for all messages is problematic:
+
+- If that key is compromised, every past and future message is exposed (no forward secrecy).
+- Ciphers have [wear-out limits](https://soatok.blog/2020/12/24/cryptographic-wear-out-for-symmetric-encryption/): a key can only safely encrypt a finite number of messages before security degrades.
+
+The solution is key rotation: derive a new key for each message. This is what the **Double Ratchet** does, covered in [Message Encryption](../02-message-encryption/index).
+
 ### Timing Side-channels
 
 All operations (scalar multiplication, point addition, KDF) must run in **constant time**: the same number of steps regardless of the secret key's value. If execution time varies depending on the key bits, an attacker can measure timing differences (via network latency or other side-channels) and recover the secret key. This is one reason X25519 is preferred: Curve25519 was designed from the start to be easy to implement in constant time.
@@ -240,17 +251,17 @@ The flow has three phases: registration, sending, and receiving.
 
 #### 1. Registration (Bob, before going offline)
 
-1. **Generate an identity keypair** ($IK_B$).
-   - This is an **Ed25519 signing keypair**:
+1. **Generate an identity keypair** ($IK_B$). This is an **Ed25519 signing keypair**:
    - A private key that can sign data.
    - A public key that others use to verify signatures.
-   - This represents Bob's long-term identity and is generated once.
-2. **Generate a signed pre-key** ($SPK_B$).
-   - This is an **X25519 key-agreement keypair** (an ECDH keypair: $sk$ is a random scalar, $pk = sk \times G$, the same as in the [online ECDH section](#elliptic-curve-diffie-hellman), just pre-uploaded instead of exchanged in real time).
+   It represents Bob's long-term identity and is generated once.
+2. **Generate a signed pre-key** ($SPK_B$). This is an **X25519 key-agreement keypair**.
+   - An ECDH keypair: $sk$ is a random scalar, $pk = sk \times G$, the same as in the [online ECDH section](#elliptic-curve-diffie-hellman), just pre-uploaded instead of exchanged in real time.
    - Its purpose is deriving shared secrets, not signing.
 3. **Generate a batch of one-time pre-keys** ($OPK_{B1}, OPK_{B2}, ...$), typically 100.
    - These are also **X25519 key-agreement** keypairs, one consumed per conversation.
-   - Why separate from SPK? The SPK is medium-term (rotated weekly) and reused across multiple conversations until rotated. If the SPK is later compromised, every session that relied solely on it would be broken. OPKs add a unique, disposable element per session: even if the SPK is compromised, past conversations that used a unique OPK remain safe.
+   - Why separate from SPK? The SPK is medium-term (rotated weekly) and reused across multiple conversations until rotated. If the SPK is later compromised, every session that relied solely on it would be broken.
+     OPKs add a unique, disposable element per session: even if the SPK is compromised, past conversations that used a unique OPK remain safe.
 4. **Sign the bundle**: hash all public keys together with BLAKE2b (a fast cryptographic hash), then sign the hash with the identity key's private key. This proves the bundle came from Bob and hasn't been tampered with.
 5. **Upload** the key bundle ($IK_B$, $SPK_B$ + signature, all OPK public keys) to the server. Bob keeps all private keys on his device.
 6. Go offline. The server holds the bundle and hands it out to anyone who wants to reach Bob.
@@ -271,8 +282,8 @@ Bob should periodically come online to rotate $SPK_B$ and replenish OPKs when th
 
 1. Fetch Bob's pre-key bundle from the server: ($IK_B$, $SPK_B$, signature, and one $OPK_B$ if available).
 2. Verify the bundle signature using $IK_B$ to confirm it came from Bob.
-3. Generate a fresh ephemeral keypair $EK_A$.
-4. Convert $IK_A$ from Ed25519 to X25519, then perform the DH operations:
+3. Generate a fresh ephemeral keypair $EK_A$ (an X25519 key-agreement keypair, same as SPK/OPK: random scalar $sk$, public key $pk = sk \times G$).
+4. Convert $IK_A$ from Ed25519 to X25519, then perform the DH operations. Each $DH(a, b)$ computes $sk_a \times pk_b$: $a$'s **private** key scalar-multiplied by $b$'s **public** key. This is the same ECDH operation from the [online section](#elliptic-curve-diffie-hellman):
    - $DH_1 = DH(IK_A, SPK_B)$ - binds sender's identity
    - $DH_2 = DH(EK_A, IK_B)$ - binds recipient's identity
    - $DH_3 = DH(EK_A, SPK_B)$ - forward secrecy via ephemeral key
@@ -299,9 +310,9 @@ Bob should periodically come online to rotate $SPK_B$ and replenish OPKs when th
 
 A single ECDH would only establish a shared secret without proving identity. Each DH serves a purpose:
 
-- $DH_1$ ($IK_A$, $SPK_B$): proves Alice's identity to Bob
-- $DH_2$ ($EK_A$, $IK_B$): proves Bob's identity to Alice
-- $DH_3$ ($EK_A$, $SPK_B$): provides forward secrecy (ephemeral + medium-term)
+- $DH_1$ ($IK_A$, $SPK_B$): proves Alice's identity to Bob.
+- $DH_2$ ($EK_A$, $IK_B$): proves Bob's identity to Alice.
+- $DH_3$ ($EK_A$, $SPK_B$): provides forward secrecy (ephemeral + medium-term).
 - $DH_4$ ($EK_A$, $OPK_B$): per-session forward secrecy, ensures each session is unique even if $SPK_B$ is later compromised
 
 ### Implementation Notes

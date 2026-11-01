@@ -5,6 +5,8 @@ _icon: icon.message
 
 How the pieces fit together for End-to-End Encryption.
 
+> **Disclaimer**: we are not security researchers or cryptography professionals. This page reinterprets and summarizes articles by people who are (primarily [Soatok](https://soatok.blog/)). Errors and misunderstandings are possible. Do not use this as your sole reference for implementing cryptography. Always consult the original sources linked in [References](#references).
+
 E2EE is not a single algorithm. It is the combination of:
 
 1. [**Key Exchange**](../01-key-exchange/index) - establish a shared secret between two peers (ECDH for online, X3DH for offline).

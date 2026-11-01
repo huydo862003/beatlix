@@ -5,6 +5,8 @@ _icon: icon.message
 
 How each message is encrypted after the initial key exchange, with forward secrecy.
 
+> **Disclaimer**: we are not security researchers or cryptography professionals. This page reinterprets and summarizes articles by people who are (primarily [Soatok](https://soatok.blog/)). Errors and misunderstandings are possible. Do not use this as your sole reference for implementing cryptography. Always consult the original sources linked in [References](#references).
+
 ## Problem
 
 Using a single shared key for all messages means: if that key is ever compromised, every past and future message is exposed.
