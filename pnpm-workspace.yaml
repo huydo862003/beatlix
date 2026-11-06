@@ -6,6 +6,6 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
 minimumReleaseAgeExclude:
-  - "@typerighter/rpc-client@0.45.1 || 0.45.3 || 0.51.0 || 0.52.1 || 0.52.2 || 0.55.0"
-  - "@typerighter/rpc-server@0.45.1 || 0.45.3 || 0.51.0 || 0.52.1 || 0.52.2 || 0.55.0"
-  - typerighter@0.45.1 || 0.45.3 || 0.51.0 || 0.52.1 || 0.52.2 || 0.55.0
+  - "@typerighter/rpc-client@0.45.1 || 0.45.3 || 0.51.0 || 0.52.1 || 0.52.2 || 0.55.0 || 0.55.2"
+  - "@typerighter/rpc-server@0.45.1 || 0.45.3 || 0.51.0 || 0.52.1 || 0.52.2 || 0.55.0 || 0.55.2"
+  - typerighter@0.45.1 || 0.45.3 || 0.51.0 || 0.52.1 || 0.52.2 || 0.55.0 || 0.55.2
