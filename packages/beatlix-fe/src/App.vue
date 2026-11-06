@@ -1,8 +1,7 @@
 <script setup lang="ts">
+import Layout from './Layout.vue';
 </script>
 
 <template>
-  <main>
-    <h1>Beatlix</h1>
-  </main>
+  <Layout />
 </template>
