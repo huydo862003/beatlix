@@ -19,4 +19,7 @@ body {
     "Helvetica Neue",
     Arial,
     sans-serif;
+
+  background-color: var(--color-primary-11);
+  color: var(--color-neutral-2);
 }
