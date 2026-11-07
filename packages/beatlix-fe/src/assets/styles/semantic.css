@@ -1,0 +1,151 @@
+@theme {
+  --color-primary-1: var(--color-space-indigo-50);
+  --color-primary-2: var(--color-space-indigo-100);
+  --color-primary-3: var(--color-space-indigo-200);
+  --color-primary-4: var(--color-space-indigo-300);
+  --color-primary-5: var(--color-space-indigo-400);
+  --color-primary-6: var(--color-space-indigo-500);
+  --color-primary-7: var(--color-space-indigo-600);
+  --color-primary-8: var(--color-space-indigo-700);
+  --color-primary-9: var(--color-space-indigo-800);
+  --color-primary-10: var(--color-space-indigo-900);
+  --color-primary-11: var(--color-space-indigo-950);
+  --color-primary-12: var(--color-space-indigo-1000);
+
+  --color-neutral-1: var(--color-dark-coffee-50);
+  --color-neutral-2: var(--color-dark-coffee-100);
+  --color-neutral-3: var(--color-dark-coffee-200);
+  --color-neutral-4: var(--color-dark-coffee-300);
+  --color-neutral-5: var(--color-dark-coffee-400);
+  --color-neutral-6: var(--color-dark-coffee-500);
+  --color-neutral-7: var(--color-dark-coffee-600);
+  --color-neutral-8: var(--color-dark-coffee-700);
+  --color-neutral-9: var(--color-dark-coffee-800);
+  --color-neutral-10: var(--color-dark-coffee-900);
+  --color-neutral-11: var(--color-dark-coffee-950);
+  --color-neutral-12: var(--color-dark-coffee-1000);
+
+  --color-accent-1: var(--color-velvet-orchid-50);
+  --color-accent-2: var(--color-velvet-orchid-100);
+  --color-accent-3: var(--color-velvet-orchid-200);
+  --color-accent-4: var(--color-velvet-orchid-300);
+  --color-accent-5: var(--color-velvet-orchid-400);
+  --color-accent-6: var(--color-velvet-orchid-500);
+  --color-accent-7: var(--color-velvet-orchid-600);
+  --color-accent-8: var(--color-velvet-orchid-700);
+  --color-accent-9: var(--color-velvet-orchid-800);
+  --color-accent-10: var(--color-velvet-orchid-900);
+  --color-accent-11: var(--color-velvet-orchid-950);
+  --color-accent-12: var(--color-velvet-orchid-1000);
+
+  --color-safe-1: var(--color-olive-leaf-50);
+  --color-safe-2: var(--color-olive-leaf-100);
+  --color-safe-3: var(--color-olive-leaf-200);
+  --color-safe-4: var(--color-olive-leaf-300);
+  --color-safe-5: var(--color-olive-leaf-400);
+  --color-safe-6: var(--color-olive-leaf-500);
+  --color-safe-7: var(--color-olive-leaf-600);
+  --color-safe-8: var(--color-olive-leaf-700);
+  --color-safe-9: var(--color-olive-leaf-800);
+  --color-safe-10: var(--color-olive-leaf-900);
+  --color-safe-11: var(--color-olive-leaf-950);
+  --color-safe-12: var(--color-olive-leaf-1000);
+
+  --color-warning-1: var(--color-honey-bronze-50);
+  --color-warning-2: var(--color-honey-bronze-100);
+  --color-warning-3: var(--color-honey-bronze-200);
+  --color-warning-4: var(--color-honey-bronze-300);
+  --color-warning-5: var(--color-honey-bronze-400);
+  --color-warning-6: var(--color-honey-bronze-500);
+  --color-warning-7: var(--color-honey-bronze-600);
+  --color-warning-8: var(--color-honey-bronze-700);
+  --color-warning-9: var(--color-honey-bronze-800);
+  --color-warning-10: var(--color-honey-bronze-900);
+  --color-warning-11: var(--color-honey-bronze-950);
+  --color-warning-12: var(--color-honey-bronze-1000);
+
+  --color-danger-1: var(--color-dark-garnet-50);
+  --color-danger-2: var(--color-dark-garnet-100);
+  --color-danger-3: var(--color-dark-garnet-200);
+  --color-danger-4: var(--color-dark-garnet-300);
+  --color-danger-5: var(--color-dark-garnet-400);
+  --color-danger-6: var(--color-dark-garnet-500);
+  --color-danger-7: var(--color-dark-garnet-600);
+  --color-danger-8: var(--color-dark-garnet-700);
+  --color-danger-9: var(--color-dark-garnet-800);
+  --color-danger-10: var(--color-dark-garnet-900);
+  --color-danger-11: var(--color-dark-garnet-950);
+  --color-danger-12: var(--color-dark-garnet-1000);
+
+  --color-info-1: var(--color-french-blue-50);
+  --color-info-2: var(--color-french-blue-100);
+  --color-info-3: var(--color-french-blue-200);
+  --color-info-4: var(--color-french-blue-300);
+  --color-info-5: var(--color-french-blue-400);
+  --color-info-6: var(--color-french-blue-500);
+  --color-info-7: var(--color-french-blue-600);
+  --color-info-8: var(--color-french-blue-700);
+  --color-info-9: var(--color-french-blue-800);
+  --color-info-10: var(--color-french-blue-900);
+  --color-info-11: var(--color-french-blue-950);
+  --color-info-12: var(--color-french-blue-1000);
+}
+
+@theme {
+  --text-2xs: var(--text-1);
+  --text-2xs--line-height: var(--leading-normal);
+  --text-xs: var(--text-2);
+  --text-xs--line-height: var(--leading-normal);
+  --text-sm: var(--text-3);
+  --text-sm--line-height: var(--leading-normal);
+  --text-md: var(--text-4);
+  --text-md--line-height: var(--leading-relaxed);
+  --text-lg: var(--text-5);
+  --text-lg--line-height: var(--leading-heading);
+  --text-xl: var(--text-6);
+  --text-xl--line-height: var(--leading-tight);
+  --text-2xl: var(--text-7);
+  --text-2xl--line-height: var(--leading-tight);
+  --text-3xl: var(--text-8);
+  --text-3xl--line-height: var(--leading-tight);
+  --text-4xl: var(--text-8);
+  --text-4xl--line-height: var(--leading-tight);
+  --text-5xl: var(--text-8);
+  --text-5xl--line-height: var(--leading-tight);
+}
+
+@theme {
+  --spacing-xs: var(--spacing-1);
+  --spacing-sm: var(--spacing-2);
+  --spacing-md: var(--spacing-4);
+  --spacing-lg: var(--spacing-6);
+  --spacing-xl: var(--spacing-8);
+  --spacing-2xl: var(--spacing-12);
+  --spacing-3xl: var(--spacing-16);
+}
+
+@theme {
+  --radius-none: 0;
+  --radius-sm: var(--radius-1);
+  --radius-md: var(--radius-2);
+  --radius-lg: var(--radius-3);
+  --radius-xl: var(--radius-4);
+  --radius-2xl: var(--radius-5);
+  --radius-full: 9999px;
+}
+
+@theme {
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  /* Buttons, inputs */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  /* Cards */
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  /* Dropdowns, popovers */
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  /* Modals, dialogs */
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  /* Toasts, command palette */
+}
