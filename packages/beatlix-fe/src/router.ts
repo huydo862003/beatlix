@@ -8,8 +8,15 @@ import NotFoundView from './views/not-found/NotFoundView.vue';
 import SignInView from './views/auth/sign-in/SignInView.vue';
 import SignUpView from './views/auth/sign-up/SignUpView.vue';
 import PersonalSpaceView from './views/spaces/PersonalSpaceView.vue';
+import LandingView from './views/landing/LandingView.vue';
 
 const routes: RouteRecordRaw[] = [
+  // Landing
+  {
+    path: '/',
+    name: 'Landing',
+    component: LandingView,
+  },
   // Main entry
   {
     path: '/app',
