@@ -6,11 +6,26 @@ import {
 } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
+import svgLoader from 'vite-svg-loader';
 
 export default defineConfig({
   plugins: [
     vue(),
     tailwindcss(),
+    svgLoader({
+      svgoConfig: {
+        plugins: [
+          {
+            name: 'preset-default',
+            params: {
+              overrides: {
+                removeViewBox: false,
+              },
+            },
+          },
+        ],
+      },
+    }),
   ],
   build: {
     emptyOutDir: true,
