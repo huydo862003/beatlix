@@ -7,6 +7,7 @@ import {
 import NotFoundView from './views/not-found/NotFoundView.vue';
 import SignInView from './views/auth/sign-in/SignInView.vue';
 import SignUpView from './views/auth/sign-up/SignUpView.vue';
+import PersonalSpaceView from './views/spaces/PersonalSpaceView.vue';
 
 const routes: RouteRecordRaw[] = [
   // Main entry
@@ -14,6 +15,17 @@ const routes: RouteRecordRaw[] = [
     path: '/app',
     name: 'App',
     redirect (to, from) { },
+  },
+  // Spaces
+  {
+    path: '/spaces',
+    name: 'SpacesBase',
+    redirect (to, from) { },
+  },
+  {
+    path: '/spaces/@me',
+    name: 'PersonalSpace',
+    component: PersonalSpaceView,
   },
   // Auth
   {
