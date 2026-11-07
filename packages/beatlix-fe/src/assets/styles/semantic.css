@@ -1,4 +1,5 @@
 @theme {
+  /* Primary: Space Indigo */
   --color-primary-1: var(--color-space-indigo-50);
   --color-primary-2: var(--color-space-indigo-100);
   --color-primary-3: var(--color-space-indigo-200);
@@ -12,83 +13,61 @@
   --color-primary-11: var(--color-space-indigo-950);
   --color-primary-12: var(--color-space-indigo-1000);
 
-  --color-neutral-1: var(--color-dark-coffee-50);
-  --color-neutral-2: var(--color-dark-coffee-100);
-  --color-neutral-3: var(--color-dark-coffee-200);
-  --color-neutral-4: var(--color-dark-coffee-300);
-  --color-neutral-5: var(--color-dark-coffee-400);
-  --color-neutral-6: var(--color-dark-coffee-500);
-  --color-neutral-7: var(--color-dark-coffee-600);
-  --color-neutral-8: var(--color-dark-coffee-700);
-  --color-neutral-9: var(--color-dark-coffee-800);
-  --color-neutral-10: var(--color-dark-coffee-900);
-  --color-neutral-11: var(--color-dark-coffee-950);
-  --color-neutral-12: var(--color-dark-coffee-1000);
+  /* Neutral: Linen (Warm Textures) */
+  --color-neutral-1: var(--color-linen-50);
+  --color-neutral-2: var(--color-linen-100);
+  --color-neutral-3: var(--color-linen-200);
+  --color-neutral-4: var(--color-linen-300);
+  --color-neutral-5: var(--color-linen-400);
+  --color-neutral-6: var(--color-linen-500);
+  --color-neutral-7: var(--color-linen-600);
+  --color-neutral-8: var(--color-linen-700);
+  --color-neutral-9: var(--color-linen-800);
+  --color-neutral-10: var(--color-linen-900);
+  --color-neutral-11: var(--color-linen-950);
+  --color-neutral-12: var(--color-linen-1000);
 
-  --color-accent-1: var(--color-velvet-orchid-50);
-  --color-accent-2: var(--color-velvet-orchid-100);
-  --color-accent-3: var(--color-velvet-orchid-200);
-  --color-accent-4: var(--color-velvet-orchid-300);
-  --color-accent-5: var(--color-velvet-orchid-400);
-  --color-accent-6: var(--color-velvet-orchid-500);
-  --color-accent-7: var(--color-velvet-orchid-600);
-  --color-accent-8: var(--color-velvet-orchid-700);
-  --color-accent-9: var(--color-velvet-orchid-800);
-  --color-accent-10: var(--color-velvet-orchid-900);
-  --color-accent-11: var(--color-velvet-orchid-950);
-  --color-accent-12: var(--color-velvet-orchid-1000);
+  /* Safe / Success: Celadon */
+  --color-safe-1: var(--color-celadon-50);
+  --color-safe-2: var(--color-celadon-100);
+  --color-safe-3: var(--color-celadon-200);
+  --color-safe-4: var(--color-celadon-300);
+  --color-safe-5: var(--color-celadon-400);
+  --color-safe-6: var(--color-celadon-500);
+  --color-safe-7: var(--color-celadon-600);
+  --color-safe-8: var(--color-celadon-700);
+  --color-safe-9: var(--color-celadon-800);
+  --color-safe-10: var(--color-celadon-900);
+  --color-safe-11: var(--color-celadon-950);
+  --color-safe-12: var(--color-celadon-1000);
 
-  --color-safe-1: var(--color-olive-leaf-50);
-  --color-safe-2: var(--color-olive-leaf-100);
-  --color-safe-3: var(--color-olive-leaf-200);
-  --color-safe-4: var(--color-olive-leaf-300);
-  --color-safe-5: var(--color-olive-leaf-400);
-  --color-safe-6: var(--color-olive-leaf-500);
-  --color-safe-7: var(--color-olive-leaf-600);
-  --color-safe-8: var(--color-olive-leaf-700);
-  --color-safe-9: var(--color-olive-leaf-800);
-  --color-safe-10: var(--color-olive-leaf-900);
-  --color-safe-11: var(--color-olive-leaf-950);
-  --color-safe-12: var(--color-olive-leaf-1000);
+  /* Danger: Sweet Salmon */
+  --color-danger-1: var(--color-sweet-salmon-50);
+  --color-danger-2: var(--color-sweet-salmon-100);
+  --color-danger-3: var(--color-sweet-salmon-200);
+  --color-danger-4: var(--color-sweet-salmon-300);
+  --color-danger-5: var(--color-sweet-salmon-400);
+  --color-danger-6: var(--color-sweet-salmon-500);
+  --color-danger-7: var(--color-sweet-salmon-600);
+  --color-danger-8: var(--color-sweet-salmon-700);
+  --color-danger-9: var(--color-sweet-salmon-800);
+  --color-danger-10: var(--color-sweet-salmon-900);
+  --color-danger-11: var(--color-sweet-salmon-950);
+  --color-danger-12: var(--color-sweet-salmon-1000);
 
-  --color-warning-1: var(--color-honey-bronze-50);
-  --color-warning-2: var(--color-honey-bronze-100);
-  --color-warning-3: var(--color-honey-bronze-200);
-  --color-warning-4: var(--color-honey-bronze-300);
-  --color-warning-5: var(--color-honey-bronze-400);
-  --color-warning-6: var(--color-honey-bronze-500);
-  --color-warning-7: var(--color-honey-bronze-600);
-  --color-warning-8: var(--color-honey-bronze-700);
-  --color-warning-9: var(--color-honey-bronze-800);
-  --color-warning-10: var(--color-honey-bronze-900);
-  --color-warning-11: var(--color-honey-bronze-950);
-  --color-warning-12: var(--color-honey-bronze-1000);
-
-  --color-danger-1: var(--color-dark-garnet-50);
-  --color-danger-2: var(--color-dark-garnet-100);
-  --color-danger-3: var(--color-dark-garnet-200);
-  --color-danger-4: var(--color-dark-garnet-300);
-  --color-danger-5: var(--color-dark-garnet-400);
-  --color-danger-6: var(--color-dark-garnet-500);
-  --color-danger-7: var(--color-dark-garnet-600);
-  --color-danger-8: var(--color-dark-garnet-700);
-  --color-danger-9: var(--color-dark-garnet-800);
-  --color-danger-10: var(--color-dark-garnet-900);
-  --color-danger-11: var(--color-dark-garnet-950);
-  --color-danger-12: var(--color-dark-garnet-1000);
-
-  --color-info-1: var(--color-french-blue-50);
-  --color-info-2: var(--color-french-blue-100);
-  --color-info-3: var(--color-french-blue-200);
-  --color-info-4: var(--color-french-blue-300);
-  --color-info-5: var(--color-french-blue-400);
-  --color-info-6: var(--color-french-blue-500);
-  --color-info-7: var(--color-french-blue-600);
-  --color-info-8: var(--color-french-blue-700);
-  --color-info-9: var(--color-french-blue-800);
-  --color-info-10: var(--color-french-blue-900);
-  --color-info-11: var(--color-french-blue-950);
-  --color-info-12: var(--color-french-blue-1000);
+  /* Info: Baby Blue Ice */
+  --color-info-1: var(--color-baby-blue-ice-50);
+  --color-info-2: var(--color-baby-blue-ice-100);
+  --color-info-3: var(--color-baby-blue-ice-200);
+  --color-info-4: var(--color-baby-blue-ice-300);
+  --color-info-5: var(--color-baby-blue-ice-400);
+  --color-info-6: var(--color-baby-blue-ice-500);
+  --color-info-7: var(--color-baby-blue-ice-600);
+  --color-info-8: var(--color-baby-blue-ice-700);
+  --color-info-9: var(--color-baby-blue-ice-800);
+  --color-info-10: var(--color-baby-blue-ice-900);
+  --color-info-11: var(--color-baby-blue-ice-950);
+  --color-info-12: var(--color-baby-blue-ice-1000);
 }
 
 @theme {
