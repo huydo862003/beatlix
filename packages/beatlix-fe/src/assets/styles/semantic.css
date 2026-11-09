@@ -128,3 +128,17 @@
     0 8px 10px -6px rgba(0, 0, 0, 0.1);
   /* Toasts, command palette */
 }
+
+/* Room scene layout tokens */
+@theme {
+  /* scene (window assembly) width relative to the wall zone */
+  --room-scene-width: 80%;
+  /* floor zone height relative to the room */
+  --room-floor-height: clamp(22%, 35dvh, 45%);
+  /* gap between window sill bottom and floor boundary */
+  --room-sill-gap: clamp(10%, 15dvh, 25%);
+  /* where objects sit on the sill (from bottom of sill) */
+  --room-sill-anchor: 55%;
+  /* fixed gap between room screen and viewport edges */
+  --room-screen-gap: var(--spacing-md);
+}
