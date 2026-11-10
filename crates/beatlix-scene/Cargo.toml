@@ -1,0 +1,11 @@
+[package]
+name = "beatlix-scene"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+glam = "0.34.3"

@@ -1,0 +1,6 @@
+[build]
+target = "wasm32-unknown-unknown"
+
+[target.wasm32-unknown-unknown]
+# Enables 128-bit SIMD instructions for WebAssembly
+rustflags = ["-C", "target-feature=+simd128"]
