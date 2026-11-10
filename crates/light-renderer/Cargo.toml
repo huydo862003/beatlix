@@ -1,0 +1,10 @@
+[package]
+name = "light-renderer"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+
+[dependencies]
+ecs = { path = "../ecs" }
+ecs-macros = { path = "../ecs-macros" }
+glam = "0.34.3"
