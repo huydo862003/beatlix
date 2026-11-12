@@ -8,3 +8,4 @@ publish = false
 ecs = { path = "../ecs" }
 ecs-macros = { path = "../ecs-macros" }
 glam = "0.34.3"
+usvg = "0.45"

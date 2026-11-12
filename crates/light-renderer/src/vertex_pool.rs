@@ -1,12 +1,12 @@
 use super::component::VertexSlice;
-use super::types::Vertex;
+use super::types::Vertex2D;
 
 /// Per-frame vertex pool for 2D polygon data
 ///
 /// Coordinate system: X right, Y up (world space)
 #[derive(Debug, Default)]
 pub struct VertexPool {
-  vertices: Vec<Vertex>,
+  vertices: Vec<Vertex2D>,
 }
 
 impl VertexPool {
@@ -21,7 +21,7 @@ impl VertexPool {
   }
 
   /// Push a polygon's vertices, returns a handle to the slice
-  pub fn push_polygon(&mut self, vertices: &[Vertex]) -> VertexSlice {
+  pub fn push_polygon(&mut self, vertices: &[Vertex2D]) -> VertexSlice {
     let start = self.vertices.len() as u32;
     self.vertices.extend_from_slice(vertices);
     VertexSlice {
@@ -30,13 +30,13 @@ impl VertexPool {
     }
   }
 
-  pub fn get_polygon(&self, slice: VertexSlice) -> &[Vertex] {
+  pub fn get_polygon(&self, slice: VertexSlice) -> &[Vertex2D] {
     let start = slice.start as usize;
     let end = start + slice.count as usize;
     &self.vertices[start..end]
   }
 
-  pub fn vertices(&self) -> &[Vertex] {
+  pub fn vertices(&self) -> &[Vertex2D] {
     &self.vertices
   }
 

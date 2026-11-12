@@ -1,6 +1,3 @@
-/// 2D vertex position in world space (X right, Y up)
-pub type Vertex = glam::Vec2;
-
 /// RGBA color with f32 channels in [0, 1]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Color {
