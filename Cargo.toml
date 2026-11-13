@@ -1,7 +1,8 @@
 [workspace]
 resolver = "3"
 members = [
-  "crates/*"
+  "crates/beatlix-lighting",
+  "crates/beatlix-lighting/crates/*",
 ]
 
 [workspace.package]

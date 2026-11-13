@@ -1,11 +1,11 @@
 [package]
-name = "light-renderer"
+name = "beatlix-lighting"
 version = "0.1.0"
 edition.workspace = true
 publish = false
 
 [dependencies]
-ecs = { path = "../ecs" }
-ecs-macros = { path = "../ecs-macros" }
+ecs = { path = "crates/ecs" }
+ecs-macros = { path = "crates/ecs-macros" }
 glam = "0.34.3"
 usvg = "0.45"

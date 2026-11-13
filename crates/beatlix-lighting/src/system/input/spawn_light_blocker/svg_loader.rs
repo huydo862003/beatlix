@@ -4,10 +4,7 @@ use crate::types::Vertex2D;
 
 /// Extract polygon outlines from an SVG string
 /// All vertices are offset by the displacement vector
-pub(super) fn load_polygons_from_svg(
-  svg_data: &str,
-  displacement: Vertex2D,
-) -> Vec<Vec<Vertex2D>> {
+pub(super) fn load_polygons_from_svg(svg_data: &str, displacement: Vertex2D) -> Vec<Vec<Vertex2D>> {
   // Step 1: Parse SVG string into a simplified tree
   let options = usvg::Options::default();
   let tree = usvg::Tree::from_str(svg_data, &options).expect("failed to parse SVG");
