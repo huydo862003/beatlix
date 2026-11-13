@@ -2,9 +2,10 @@ mod convex_hull;
 mod svg_loader;
 
 use ecs::{EcsEntity, EcsWorld};
+use glam::Vec3;
 
 use crate::archetype::LightBlockerArchetype;
-use crate::component::{LightOccluderComponent, LightReceiverComponent};
+use crate::component::{LightOccluderComponent, LightReceiverComponent, TransformComponent};
 use crate::types::Vertex2D;
 use crate::world::LightWorld;
 
@@ -12,8 +13,10 @@ use convex_hull::compute_convex_hull;
 use svg_loader::load_polygons_from_svg;
 
 /// Spawn a light blocker entity from raw polygon vertices
+/// Position defaults to origin on the surface (z=0)
 pub fn spawn_light_blocker(
   world: &mut LightWorld,
+  position: Vertex2D,
   vertices: &[Vertex2D],
 ) -> EcsEntity<LightBlockerArchetype> {
   let hull = compute_convex_hull(vertices);
@@ -21,6 +24,10 @@ pub fn spawn_light_blocker(
   let receiver_slice = world.vertex_pool.push_polygon(vertices);
 
   world.spawn(LightBlockerArchetype {
+    transform: TransformComponent {
+      position: Vec3::new(position.x, position.y, 0.0),
+      direction: Vec3::Z,
+    },
     occluder: LightOccluderComponent {
       vertices: occluder_slice,
     },
@@ -40,6 +47,6 @@ pub fn spawn_light_blockers_from_svg(
   let polygons = load_polygons_from_svg(svg_data, displacement);
   polygons
     .iter()
-    .map(|polygon_vertices| spawn_light_blocker(world, polygon_vertices))
+    .map(|polygon_vertices| spawn_light_blocker(world, displacement, polygon_vertices))
     .collect()
 }
