@@ -192,8 +192,8 @@ importers:
   .:
     devDependencies:
       '@hdnax/nuclint':
-        specifier: ^0.17.5
-        version: 0.17.5(974db89b32964e331314160f3bb6d732)
+        specifier: ^0.18.1
+        version: 0.18.1(974db89b32964e331314160f3bb6d732)
       '@stylistic/eslint-plugin':
         specifier: ^5.10.0
         version: 5.10.0(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))
@@ -246,6 +246,9 @@ importers:
 
   packages/beatlix-fe:
     dependencies:
+      '@beatlix/lighting':
+        specifier: workspace:*
+        version: link:../beatlix-lighting
       '@fontsource/comfortaa':
         specifier: ^5.3.0
         version: 5.3.0
@@ -292,12 +295,17 @@ importers:
       vite:
         specifier: ^6.3.5
         version: 6.4.5(@types/node@26.6.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)(yaml@2.9.1)
+      vite-plugin-wasm:
+        specifier: ^3.6.0
+        version: 3.6.0(vite@6.4.5(@types/node@26.6.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)(yaml@2.9.1))
       vite-svg-loader:
         specifier: ^5.1.3
         version: 5.1.3(supports-color@7.2.0)(vue@3.5.44(typescript@6.0.3))
       vue-tsc:
         specifier: ^2.2.10
         version: 2.2.12(typescript@6.0.3)
+
+  packages/beatlix-lighting: {}
 
 packages:
 
@@ -751,8 +759,8 @@ packages:
   '@fontsource/comfortaa@5.3.0':
     resolution: {integrity: sha512-ab4DERH0q6ko8QCpEZzOV9ebK39LgQ2oM91AkLNqu0VIxxwT0nV2D3sOuI7iLirWWq4IMooaIN6/2llxrDN2JA==}
 
-  '@hdnax/nuclint@0.17.5':
-    resolution: {integrity: sha512-E7X7Gses+8ObHErsWxb+bmKFaDwlDRQshFR2OFmDrlgGj/I3W+SwCHnh74B1kL3cFCaW9LOSClPP+zr+zMKcSA==}
+  '@hdnax/nuclint@0.18.1':
+    resolution: {integrity: sha512-N+F9s2QWtpDCg8QmtBeDtT/CDWh3vouC2K+Q4E0EVZY8+NMlpA9m0jUoTwVRv0I/HmalKjoEChN96mLT3xj7lg==}
     peerDependencies:
       '@stylistic/eslint-plugin': ^5.10.0
       eslint: ^10.9.1
@@ -2887,6 +2895,11 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
+  vite-plugin-wasm@3.6.0:
+    resolution: {integrity: sha512-mL/QPziiIA4RAA6DkaZZzOstdwbW5jO4Vz7Zenj0wieKWBlNvIvX5L5ljum9lcUX0ShNfBgCNLKTjNkRVVqcsw==}
+    peerDependencies:
+      vite: ^2 || ^3 || ^4 || ^5 || ^6 || ^7 || ^8
+
   vite-svg-loader@5.1.3:
     resolution: {integrity: sha512-JLROmqf5lrg2EXqQf6uXHiXoY1ea8xt3+i5nI/cjXgEmEZL4P7rrQZczi/aWF+V9JTK6pyfMmhWmVW2FAYji1g==}
     peerDependencies:
@@ -3375,7 +3388,7 @@ snapshots:
 
   '@fontsource/comfortaa@5.3.0': {}
 
-  '@hdnax/nuclint@0.17.5(974db89b32964e331314160f3bb6d732)':
+  '@hdnax/nuclint@0.18.1(974db89b32964e331314160f3bb6d732)':
     dependencies:
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))
       eslint: 10.13.0(jiti@2.7.0)(supports-color@7.2.0)
@@ -5483,6 +5496,10 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
+
+  vite-plugin-wasm@3.6.0(vite@6.4.5(@types/node@26.6.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)(yaml@2.9.1)):
+    dependencies:
+      vite: 6.4.5(@types/node@26.6.5)(jiti@2.7.0)(lightningcss@1.33.0)(tsx@4.23.15)(yaml@2.9.1)
 
   vite-svg-loader@5.1.3(supports-color@7.2.0)(vue@3.5.44(typescript@6.0.3)):
     dependencies:

@@ -14,7 +14,7 @@
     "docs:dev": "pnpm --filter @beatlix/homepage run dev"
   },
   "devDependencies": {
-    "@hdnax/nuclint": "^0.17.5",
+    "@hdnax/nuclint": "^0.18.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^26.4.1",
     "eslint": "^10.11.0",

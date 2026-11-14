@@ -4,8 +4,17 @@ version = "0.1.0"
 edition.workspace = true
 publish = false
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+wasm = ["dep:wasm-bindgen", "dep:serde", "dep:serde-wasm-bindgen"]
+
 [dependencies]
 ecs = { path = "crates/ecs" }
 ecs-macros = { path = "crates/ecs-macros" }
 glam = "0.34.3"
 usvg = "0.45"
+serde = { version = "1", features = ["derive"], optional = true }
+serde-wasm-bindgen = { version = "0.6", optional = true }
+wasm-bindgen = { version = "0.2", optional = true }

@@ -30,7 +30,7 @@
             "rustfmt"
           ];
           targets = [
-            "wasm32-wasip1"
+            "wasm32-unknown-unknown"
           ];
         };
       in
@@ -40,6 +40,7 @@
             nodejs
             pnpm_12
             rust-stable
+            wasm-pack
           ];
         };
       }
