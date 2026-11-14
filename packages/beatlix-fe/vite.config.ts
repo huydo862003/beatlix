@@ -7,9 +7,11 @@ import {
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
 import svgLoader from 'vite-svg-loader';
+import wasm from 'vite-plugin-wasm';
 
 export default defineConfig({
   plugins: [
+    wasm(),
     vue(),
     tailwindcss(),
     svgLoader({

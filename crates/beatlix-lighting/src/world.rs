@@ -13,6 +13,16 @@ pub struct LightWorld {
   pub camera: Camera,
 }
 
+impl LightWorld {
+  pub fn new(camera: Camera) -> Self {
+    Self {
+      storage: EcsStorage::new(),
+      vertex_pool: VertexPool::new(),
+      camera,
+    }
+  }
+}
+
 /// Camera that defines how 3D world maps to 2D screen
 #[derive(Debug, Clone, Copy)]
 pub struct Camera {

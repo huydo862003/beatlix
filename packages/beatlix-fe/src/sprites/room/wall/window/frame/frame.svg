@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 380">
+
+  <path fill="#382E31" fill-rule="evenodd" d="
+    M8 0 Q0 0 0 8 L0 372 Q0 380 8 380 L492 380 Q500 380 500 372 L500 8 Q500 0 492 0 Z
+    M8 8 L246 8 L246 186 L8 186 Z
+    M254 8 L492 8 L492 186 L254 186 Z
+    M8 194 L246 194 L246 372 L8 372 Z
+    M254 194 L492 194 L492 372 L254 372 Z
+  "/>
+
+  <rect x="8"   y="8"   width="238" height="2" fill="#544549" opacity="0.7"/>
+  <rect x="8"   y="8"   width="2"   height="178" fill="#544549" opacity="0.7"/>
+  <rect x="8"   y="184" width="238" height="2" fill="#1C1718" opacity="0.4"/>
+  <rect x="244" y="8"   width="2"   height="178" fill="#1C1718" opacity="0.4"/>
+
+  <rect x="254" y="8"   width="238" height="2" fill="#544549" opacity="0.7"/>
+  <rect x="254" y="8"   width="2"   height="178" fill="#544549" opacity="0.7"/>
+  <rect x="254" y="184" width="238" height="2" fill="#1C1718" opacity="0.4"/>
+  <rect x="490" y="8"   width="2"   height="178" fill="#1C1718" opacity="0.4"/>
+
+  <rect x="8"   y="194" width="238" height="2" fill="#544549" opacity="0.7"/>
+  <rect x="8"   y="194" width="2"   height="178" fill="#544549" opacity="0.7"/>
+  <rect x="8"   y="370" width="238" height="2" fill="#1C1718" opacity="0.4"/>
+  <rect x="244" y="194" width="2"   height="178" fill="#1C1718" opacity="0.4"/>
+
+  <rect x="254" y="194" width="238" height="2" fill="#544549" opacity="0.7"/>
+  <rect x="254" y="194" width="2"   height="178" fill="#544549" opacity="0.7"/>
+  <rect x="254" y="370" width="238" height="2" fill="#1C1718" opacity="0.4"/>
+  <rect x="490" y="194" width="2"   height="178" fill="#1C1718" opacity="0.4"/>
+</svg>
