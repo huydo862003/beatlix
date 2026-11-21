@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@beatlix/lighting",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Beatlix lighting engine",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "wasm.js",
+    "wasm.d.ts",
+    "wasm_bg.wasm",
+    "wasm_bg.js"
+  ],
+  "scripts": {
+    "postinstall": "bash ./scripts/build-wasm.sh && tsc",
+    "build": "bash ./scripts/build-wasm.sh && tsc"
+  }
+}
