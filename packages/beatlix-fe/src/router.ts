@@ -21,13 +21,17 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/app',
     name: 'App',
-    redirect (to, from) { },
+    redirect: {
+      name: 'PersonalSpace',
+    },
   },
   // Spaces
   {
     path: '/spaces',
     name: 'SpacesBase',
-    redirect (to, from) { },
+    redirect: {
+      name: 'PersonalSpace',
+    },
   },
   {
     path: '/spaces/@me',
@@ -38,20 +42,19 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/sign-in',
     name: 'Sign in',
-    beforeEnter () { },
     component: SignInView,
   },
   {
     path: '/sign-up',
     name: 'Sign up',
-    beforeEnter () { },
     component: SignUpView,
   },
   {
     path: '/sign-out',
     name: 'Sign out',
-    beforeEnter () { },
-    redirect (to, from) { },
+    redirect: {
+      name: 'Landing',
+    },
   },
   // 404: Ensure this is at the end
   {

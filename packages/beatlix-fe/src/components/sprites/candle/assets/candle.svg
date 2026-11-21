@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130">
+
+  <defs>
+    <radialGradient id="flame-glow" cx="50%" cy="80%" r="50%">
+      <stop offset="0%" stop-color="#E8A030" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#E8A030" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="65" cy="125" rx="18" ry="4" fill="#000" opacity="0.3"/>
+
+  <ellipse cx="65" cy="28" rx="18" ry="22" fill="url(#flame-glow)"/>
+
+  <path d="M65 44 C57 38 55 28 59 18 C61 12 63 8 65 4 C67 8 69 12 71 18 C75 28 73 38 65 44Z" fill="#E8A030" opacity="0.7"/>
+  <path d="M65 42 C60 36 59 28 62 20 C63 16 64 13 65 10 C66 13 67 16 68 20 C71 28 70 36 65 42Z" fill="#F5D060"/>
+  <ellipse cx="65" cy="32" rx="4" ry="7" fill="#FFF5D0" opacity="0.9"/>
+
+  <line x1="65" y1="44" x2="65" y2="52" stroke="#2A1F3D" stroke-width="2" stroke-linecap="round"/>
+
+  <ellipse cx="65" cy="55" rx="13" ry="4" fill="#D4C09A"/>
+
+  <rect x="52" y="55" width="26" height="68" rx="3" fill="#E8D5B0"/>
+
+  <rect x="52" y="55" width="6" height="68" rx="3" fill="#D4C09A" opacity="0.4"/>
+  <rect x="72" y="55" width="6" height="68" rx="3" fill="#C8B080" opacity="0.3"/>
+</svg>
